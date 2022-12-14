@@ -1,6 +1,6 @@
 within ThermofluidStream.Processes;
 model ConductionElement "Element with quasi-stationary mass and heatport"
-  extends Internal.PartialConductionElement;
+  extends Internal.PartialConductionElement(final useAverageHeatflow = false, final useLogMean = false);
 
   parameter Boolean resistanceFromAU = true
     annotation(Dialog(group="Thermal Conductance"));

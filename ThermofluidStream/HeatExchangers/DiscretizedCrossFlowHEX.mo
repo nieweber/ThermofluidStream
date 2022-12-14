@@ -9,12 +9,19 @@ model DiscretizedCrossFlowHEX "Discretized Heat Exchanger for single- or two-pha
       ThermofluidStream.Media.myMedia.Interfaces.PartialMedium                           "Medium model side B"
     annotation (choicesAllMatching=true, Dialog(group = "Medium definitions"));
 
+  //Global parameter definition necessary because in cross-flow hx ,the flow of one side splits into seperate subflows with
+  //as a fraction of the total flow (m_flow/nCells). The nominal flow in the conductionElement thus also has to be divided by nCells.
+  parameter SI.MassFlowRate m_flow_nom_hex = 1 "Nominal mass flow for heat transfer coefficient scaling"
+  annotation(Dialog(tab = "Advanced"));
+
+
   replaceable model ConductionElementA = Internal.ConductionElementHEX
     constrainedby Internal.PartialConductionElementHEX(
       final A=A/nCells,
       final V=V_Hex/nCells,
       redeclare package Medium=MediumA,
-      final enforce_global_energy_conservation=enforce_global_energy_conservation)
+      final enforce_global_energy_conservation=enforce_global_energy_conservation,
+      final m_flow_nom = m_flow_nom_hex/nCells)
     "Heat transfer element model for side A"
       annotation(choicesAllMatching=true, Dialog(group = "Medium definitions"));
   replaceable model ConductionElementB = Internal.ConductionElementHEX
@@ -22,7 +29,8 @@ model DiscretizedCrossFlowHEX "Discretized Heat Exchanger for single- or two-pha
       final A=A/nCells,
       final V=V_Hex/nCells,
       redeclare package Medium=MediumB,
-      final enforce_global_energy_conservation=enforce_global_energy_conservation)
+      final enforce_global_energy_conservation=enforce_global_energy_conservation,
+      final m_flow_nom = m_flow_nom_hex/nCells)
     "Heat transfer element model for side B"
       annotation(choicesAllMatching=true, Dialog(group = "Medium definitions"));
 
