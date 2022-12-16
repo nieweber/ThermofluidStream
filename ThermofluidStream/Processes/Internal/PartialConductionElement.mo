@@ -30,11 +30,13 @@ partial model PartialConductionElement "Element with quasi-stationary mass and h
   SI.SpecificEnthalpy h(start=Medium.h_default, stateSelect = StateSelect.prefer);
 
   Medium.ThermodynamicState state = Medium.setState_phX(p_in, h, Xi_in);
+
   SI.Temperature T1 = Medium.temperature(inlet.state) "Temperature at inlet";
   SI.Temperature T2 = Medium.temperature(state) "Temperature at outlet";
 
   SI.Temperature DT1 = T_heatPort - T1 "Temperature difference 1";
   SI.Temperature DT2 = T_heatPort - T2 "Temperature difference 2";
+
   Real Tcross "Variable to indicate temperature crossing";
 
   SI.ThermalConductance k "Thermal conductance heatport->fluid";
@@ -52,6 +54,8 @@ protected
   SI.Temperature T_heatPort;
   SI.HeatFlowRate Q_flow;
 
+
+
 initial equation
   if init == Internal.InitializationMethodsCondElement.T then
     h = Medium.specificEnthalpy(Medium.setState_pTX(p_in, T_0, Xi_in));
@@ -63,6 +67,7 @@ initial equation
 
 equation
   assert(noEvent(inlet.m_flow > m_flow_assert), "Negative massflow at Element", dropOfCommons.assertionLevel);
+
 
   //mass is assumed to be quasisationary-> this violates the conservation of mass since m_flow_in = -m_flow_out. see documentation/information
   M = V*rho;
@@ -89,13 +94,15 @@ equation
     deltaE_system = 0;
   end if;
 
+
+
     if useAverageHeatflow then
 
     assert(noEvent((T_heatPort - T1)*(T_heatPort - T2) > 0), "Temperature Crossing! Temperature differences have different sign", AssertionLevel.warning);
 
     if not useLogMean then
 
-    Q_flow = k* Modelica.Fluid.Utilities.regStep((T_heatPort - T1)*(T_heatPort - T2),T_heatPort - T1/2 - T2/2,T_heatPort - T1, 0.5);
+    Q_flow = k* Modelica.Fluid.Utilities.regStep((T_heatPort - T1)*(T_heatPort - T2),T_heatPort - T1/2 - T2/2,T_heatPort - T2, 0.5);
 
     else
 
