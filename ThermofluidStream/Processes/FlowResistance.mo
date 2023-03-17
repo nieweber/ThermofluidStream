@@ -7,6 +7,7 @@ model FlowResistance "Flow resistance model"
   parameter SI.Radius r(min=0) "Radius of pipe";
   parameter SI.Length l(min=0) "Length of pipe";
 
+
   parameter Utilities.Units.Inertance L_value = dropOfCommons.L "Inertance of pipe"
     annotation(Dialog(tab="Advanced", enable=not computeL));
   parameter Boolean computeL = true "Compute L from r and l"
@@ -18,20 +19,33 @@ model FlowResistance "Flow resistance model"
     annotation (
       choices(
         choice(
-          redeclare function pLoss = ThermofluidStream.Processes.Internal.FlowResistance.pleaseSelectPressureLoss
-          "no function selected"),
+          redeclare function pLoss =
+            ThermofluidStream.Processes.Internal.FlowResistance.pleaseSelectPressureLoss
+          "No function selected"),
         choice(
-          redeclare function pLoss = ThermofluidStream.Processes.Internal.FlowResistance.linearQuadraticPressureLoss
-          "linear-quadratic"),
+          redeclare function pLoss =
+            ThermofluidStream.Processes.Internal.FlowResistance.linearQuadraticPressureLoss
+          "Linear-quadratic"),
         choice(
-          redeclare function pLoss = ThermofluidStream.Processes.Internal.FlowResistance.laminarPressureLoss
-          "laminar"),
+          redeclare function pLoss =
+            ThermofluidStream.Processes.Internal.FlowResistance.laminarPressureLoss
+          "Laminar (Hagen-Poiseuille)"),
         choice(
-          redeclare function pLoss = ThermofluidStream.Processes.Internal.FlowResistance.laminarTurbulentPressureLoss
-          "laminar-turbulent Cheng2008"),
+          redeclare function pLoss =
+            ThermofluidStream.Processes.Internal.FlowResistance.laminarTurbulentPressureLoss
+          "Laminar-turbulent (Cheng2008)"),
         choice(
-          redeclare function pLoss = ThermofluidStream.Processes.Internal.FlowResistance.laminarTurbulentPressureLossHaaland
-          "laminar-turbulent Haaland1983")),
+          redeclare function pLoss =
+            ThermofluidStream.Processes.Internal.FlowResistance.laminarTurbulentPressureLossHaaland
+          "Laminar-turbulent (Haaland1983)"),
+        choice(
+          redeclare function pLoss =
+            ThermofluidStream.Processes.Internal.FlowResistance.zetaPressureLoss
+          "Zeta-value"),
+        choice(
+          redeclare function pLoss =
+            ThermofluidStream.Processes.Internal.FlowResistance.nominalPressureLoss
+          "Pressure drop from nominal values")),
       Documentation(info="<html>
 <p>
 This function computes the pressure loss of the fluid depending on the massflow,
@@ -44,6 +58,7 @@ protected
     "density of medium entering";
   SI.DynamicViscosity mu_in = Medium.dynamicViscosity(inlet.state)
     "dynamic viscosity of medium entering";
+
 
 equation
   dp = -pLoss(m_flow, rho_in, mu_in, r, l);
