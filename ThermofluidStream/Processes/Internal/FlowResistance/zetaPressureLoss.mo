@@ -3,17 +3,17 @@ function zetaPressureLoss "Pressure loss function based on zeta value"
   extends Internal.FlowResistance.partialPressureLoss;
 
   input ThermofluidStream.Processes.Internal.GeometryOfResistance geometry = ThermofluidStream.Processes.Internal.GeometryOfResistance.circular
+  "Geometry of cross sectional area"
     annotation(Dialog(enable=true),
      choices(
       choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.circular "Circular",
       choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle "Rectangle",
       choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.other "Other"));
 
-  input SI.Length r(min=0) "Pipe radius"
-    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular)));
-  input SI.Length a(min=0) "Rectangle width"
+  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular)));
+  input SI.Length a(min=0) = 0 "Rectangle width"
     annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
-  input SI.Length b(min=0) "Rectangle height"
+  input SI.Length b(min=0) = 0 "Rectangle height"
     annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
 
   input SI.Area A = Modelica.Constants.pi*r*r "Reference area from parameter"

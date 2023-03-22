@@ -5,7 +5,7 @@ model FlowResistance "Flow resistance model"
   import Modelica.Constants.pi "Constant Pi";
 
   //parameter SI.Radius r(min=0) "Radius of pipe";
-  //parameter SI.Length l(min=0) "Length of pipe";
+  parameter SI.Length l(min=0) "Length of component";
 
 
   parameter Utilities.Units.Inertance L_value = dropOfCommons.L "Inertance of pipe"
@@ -58,10 +58,11 @@ protected
     "density of medium entering";
   SI.DynamicViscosity mu_in = Medium.dynamicViscosity(inlet.state)
     "dynamic viscosity of medium entering";
+  //SI.Length r_h;
 
 
 equation
-  dp = -pLoss(m_flow, rho_in, mu_in);
+  dp = -pLoss(m_flow, rho_in, mu_in, l=l);
   h_out = h_in;
   Xi_out = Xi_in;
 

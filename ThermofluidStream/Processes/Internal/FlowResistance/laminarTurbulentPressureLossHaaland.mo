@@ -5,8 +5,20 @@ function laminarTurbulentPressureLossHaaland "Laminar and turbulent flow regimes
   import Modelica.Constants.pi;
 
   // Inputs
-  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = true));
-  input SI.Length l(min=0) "Pipe length" annotation(Dialog(enable = true));
+  input ThermofluidStream.Processes.Internal.GeometryOfResistance geometry = ThermofluidStream.Processes.Internal.GeometryOfResistance.circular
+  "Geometry of cross sectional area"
+    annotation(Dialog(enable=true),
+     choices(
+      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.circular "Circular",
+      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle "Rectangle",
+      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.other "Other"));
+
+  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular)));
+  input SI.Length a(min=0) = 0 "Rectangle width"
+    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
+  input SI.Length b(min=0) = 0 "Rectangle height"
+    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
+  input SI.Length d_h_input = 0 "Custom hydraulic diameter if shape not available" annotation (Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.other)));
 
   input Real Re_laminar(unit "1") = 2000
     "Upper Reynolds number boundary for laminar flow in pipe"
@@ -41,9 +53,8 @@ function laminarTurbulentPressureLossHaaland "Laminar and turbulent flow regimes
 protected
   SI.Length ks "pipe roughness";
 
-  SI.Length diameter=r*2 "Diameter of Pipe";
   SI.Area area=pi*r^2 "Area of Pipe";
-  Real relative_roughness=ks/diameter "Relative Roughness of Pipe";
+  Real relative_roughness=ks/d_h "Relative Roughness of Pipe";
 
   Real Re_abs "absolute value of Reynolds number";
   Real Re_abs_limited "limited absolute value of Reynolds number";
@@ -71,16 +82,23 @@ algorithm
     ks := ks_input;
   end if;
 
+  if geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular then
+    d_h := 2*r;
+  elseif geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle then
+    d_h := 2*a*b/(a+b);
+  elseif geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.other then
+    d_h := d_h_input;
+  end if;
 
   // absolute Reynolds number
-  Re_abs := abs(m_flow)*diameter/(area*mu);
+  Re_abs := abs(m_flow)*d_h/(area*mu);
   Re_abs_limited := max(eps, min(1, Re_abs));
 
   friction_factor :=
     (-1.8/n*log10((6.9/Re_abs_limited)^n + (relative_roughness/3.75)^(1.11*n)))^(-2);
 
-  pressureLossLaminar := m_flow*mu*shape_factor*l/(2*rho*diameter^2*area);
-  pressureLossTurbulent := m_flow*abs(m_flow)*friction_factor*l/(2*rho*diameter*
+  pressureLossLaminar := m_flow*mu*shape_factor*l/(2*rho*d_h^2*area);
+  pressureLossTurbulent := m_flow*abs(m_flow)*friction_factor*l/(2*rho*d_h*
     area^2);
 
   pressureLoss := Utilities.Functions.blendFunction(

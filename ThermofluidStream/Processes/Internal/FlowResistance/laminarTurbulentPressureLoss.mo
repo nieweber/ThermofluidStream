@@ -4,8 +4,20 @@ function laminarTurbulentPressureLoss
   extends Internal.FlowResistance.partialPressureLoss;
   import Modelica.Constants.pi;
 
-  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = true));
-  input SI.Length l(min=0) "Pipe length" annotation(Dialog(enable = true));
+  input ThermofluidStream.Processes.Internal.GeometryOfResistance geometry = ThermofluidStream.Processes.Internal.GeometryOfResistance.circular
+  "Geometry of cross sectional area"
+    annotation(Dialog(enable=true),
+     choices(
+      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.circular "Circular",
+      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle "Rectangle",
+      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.other "Other"));
+
+  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular)));
+  input SI.Length a(min=0) = 0 "Rectangle width"
+    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
+  input SI.Length b(min=0) = 0 "Rectangle height"
+    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
+  input SI.Length d_h_input = 0 "Custom hydraulic diameter if shape not available" annotation (Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.other)));
 
   input SI.Length ks_input(min=1e-7) = 1e-7 "Pipe roughness"
     annotation(Dialog(enable=(material == ThermofluidStream.Processes.Internal.Material.other)));
@@ -22,14 +34,14 @@ function laminarTurbulentPressureLoss
 
 protected
   constant Real R_laminar_DarcyWeisbach_min(unit="1") = 500 "Minimal Reynolds number to use the general equation. Laminar flow before";
-  SI.Length ks "pipe roughness";
+  SI.Length ks "Pipe roughness";
 
-  Real a(unit="1") "laminar flow factor for the DarcyWeisbach equation (1=laminar flow; 0=turbolent flow)";
-  Real b(unit="1") "turbolent flow factor for DarcyWeisbach equation (1=fully smooth turbolent flow; 0= fully rough turbolent flow)";
+  Real a_factor(unit="1") "Laminar flow factor for the DarcyWeisbach equation (1=laminar flow; 0=turbulent flow)";
+  Real b_factor(unit="1") "Turbulent flow factor for DarcyWeisbach equation (1=fully smooth turbulent flow; 0= fully rough turbulent flow)";
   Real lambda_aux(unit="1") "darcy friction factor for DarcyWeisbach equation";
 
-  SI.Velocity u "median flow velocity";
-  Real Re(unit="1") "Reynolds number for flow though the pipe";
+  SI.Velocity u "Median flow velocity";
+  Real Re(unit="1") "Reynolds number for flow through the pipe";
   constant Real eps(unit="1") = 0.001;
 algorithm
   if material == ThermofluidStream.Processes.Internal.Material.concrete then
@@ -55,10 +67,10 @@ algorithm
   Re :=abs(u)*rho*2*r/mu + eps;
 
   // cheng 2008. Formulas for Friction Factor in Transitional Regimes. Journal of Hydraulic Engineering.
-  a := 1/(1+(Re/2720)^9);
-  b := 1/(1+(Re/(160*2*r/ks))^2);
+  a_factor := 1/(1 + (Re/2720)^9);
+  b_factor := 1/(1 + (Re/(160*2*r/ks))^2);
   //compute lambda_aux = Re*lambda to avoid devision by zero at Re=0 and to avoid if-else
-  lambda_aux := 64^a * Re^(1-a) * ((1.8*log10(Re/6.8))^(2*(a-1)*b) * (2*log10(3.7*2*r/ks))^(2*(a-1)*(1-b)));
+  lambda_aux :=64^a_factor*Re^(1 - a_factor)*((1.8*log10(Re/6.8))^(2*(a_factor - 1)*b_factor)*(2*log10(3.7*2*r/ks))^(2*(a_factor - 1)*(1 - b_factor)));
 
   pressureLoss := lambda_aux*l*mu*u/(8*r^2);
 
