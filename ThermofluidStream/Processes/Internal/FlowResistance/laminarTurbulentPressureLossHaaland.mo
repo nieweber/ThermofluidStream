@@ -5,6 +5,9 @@ function laminarTurbulentPressureLossHaaland "Laminar and turbulent flow regimes
   import Modelica.Constants.pi;
 
   // Inputs
+  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = true));
+  input SI.Length l(min=0) "Pipe length" annotation(Dialog(enable = true));
+
   input Real Re_laminar(unit "1") = 2000
     "Upper Reynolds number boundary for laminar flow in pipe"
     annotation(Dialog(enable=true));

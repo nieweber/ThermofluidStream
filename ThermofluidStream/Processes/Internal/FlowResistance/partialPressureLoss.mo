@@ -4,8 +4,8 @@ partial function partialPressureLoss
   input SI.MassFlowRate m_flow "Mass flow rate";
   input SI.Density rho "Medium density";
   input SI.DynamicViscosity mu "Medium dynamic viscosity";
-  input SI.Length r(min=0) "Pipe radius";
-  input SI.Length l(min=0) "Pipe length";
+  //input SI.Length r(min=0) "Pipe radius";
+  //input SI.Length l(min=0) "Pipe length";
 
   output SI.Pressure pressureLoss "Pressure lost in Pipe";
 

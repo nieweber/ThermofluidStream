@@ -4,6 +4,9 @@ function laminarTurbulentPressureLoss
   extends Internal.FlowResistance.partialPressureLoss;
   import Modelica.Constants.pi;
 
+  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = true));
+  input SI.Length l(min=0) "Pipe length" annotation(Dialog(enable = true));
+
   input SI.Length ks_input(min=1e-7) = 1e-7 "Pipe roughness"
     annotation(Dialog(enable=(material == ThermofluidStream.Processes.Internal.Material.other)));
 

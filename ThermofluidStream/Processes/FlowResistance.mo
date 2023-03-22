@@ -1,11 +1,11 @@
 within ThermofluidStream.Processes;
 model FlowResistance "Flow resistance model"
-  extends Interfaces.SISOFlow(final L=if computeL then l/(r^2*pi) else L_value, final clip_p_out=true);
+  extends Interfaces.SISOFlow(final L=if computeL then 1/(1^2*pi) else L_value, final clip_p_out=true);
 
   import Modelica.Constants.pi "Constant Pi";
 
-  parameter SI.Radius r(min=0) "Radius of pipe";
-  parameter SI.Length l(min=0) "Length of pipe";
+  //parameter SI.Radius r(min=0) "Radius of pipe";
+  //parameter SI.Length l(min=0) "Length of pipe";
 
 
   parameter Utilities.Units.Inertance L_value = dropOfCommons.L "Inertance of pipe"
@@ -61,7 +61,7 @@ protected
 
 
 equation
-  dp = -pLoss(m_flow, rho_in, mu_in, r, l);
+  dp = -pLoss(m_flow, rho_in, mu_in);
   h_out = h_in;
   Xi_out = Xi_in;
 
