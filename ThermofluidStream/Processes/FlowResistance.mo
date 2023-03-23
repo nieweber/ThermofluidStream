@@ -56,6 +56,8 @@ some medium properties and the geometry of the pipe.
 </p>
 </html>"));
 
+  Internal.pressureLossSummary dp_summary "Detailed pressure drop values";
+
 protected
   SI.Density rho_in = max(rho_min, Medium.density(inlet.state))
     "density of medium entering";
@@ -65,9 +67,11 @@ protected
 
 
 equation
-  dp = -pLoss(m_flow, rho_in, mu_in);
+  //(dp, dp_summary.zeta) = -pLoss(m_flow, rho_in, mu_in);
   h_out = h_in;
   Xi_out = Xi_in;
+
+  (dp, dp_summary.zeta) = pLoss(m_flow, rho_in, mu_in);
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={
