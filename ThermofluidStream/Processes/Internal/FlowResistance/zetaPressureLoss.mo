@@ -2,22 +2,21 @@ within ThermofluidStream.Processes.Internal.FlowResistance;
 function zetaPressureLoss "Pressure loss function based on zeta value"
   extends Internal.FlowResistance.partialPressureLoss;
 
-  input ThermofluidStream.Processes.Internal.GeometryOfResistance geometry = ThermofluidStream.Processes.Internal.GeometryOfResistance.circular
-  "Geometry of cross sectional area"
-    annotation(Dialog(enable=true),
-     choices(
-      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.circular "Circular",
-      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle "Rectangle",
-      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.other "Other"));
+  input ShapeOfResistance shape=ThermofluidStream.Processes.Internal.ShapeOfResistance.circular "Shape of cross sectional area"
+  annotation (Dialog(enable=true),
+  choices(
+      choice=ThermofluidStream.Processes.Internal.ShapeOfResistance.circular "Circular",
+      choice=ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle "Rectangle",
+      choice=ThermofluidStream.Processes.Internal.ShapeOfResistance.other "Other"));
 
-  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular)));
+  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular)));
   input SI.Length a(min=0) = 0 "Rectangle width"
-    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
+    annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle)));
   input SI.Length b(min=0) = 0 "Rectangle height"
-    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
+    annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle)));
 
   input SI.Area A = Modelica.Constants.pi*r*r "Reference area from parameter"
-    annotation(Dialog(enable=(geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.other)));
+    annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.other)));
 
   input Real zeta( unit = "1") "Zeta value of component"
     annotation(Dialog(enable=true));
@@ -29,11 +28,11 @@ protected
 
 algorithm
 
-  if geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular then
+  if shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular then
     A_zeta :=Modelica.Constants.pi*r*r;
-  elseif geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle then
+  elseif shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle then
     A_zeta := a*b;
-  elseif geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.other then
+  elseif shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.other then
     A_zeta := A;
   end if;
 

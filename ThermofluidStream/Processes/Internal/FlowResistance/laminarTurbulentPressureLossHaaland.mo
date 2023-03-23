@@ -5,21 +5,20 @@ function laminarTurbulentPressureLossHaaland "Laminar and turbulent flow regimes
   import Modelica.Constants.pi;
 
   // Inputs
-  input ThermofluidStream.Processes.Internal.GeometryOfResistance geometry = ThermofluidStream.Processes.Internal.GeometryOfResistance.circular
-  "Geometry of cross sectional area"
-    annotation(Dialog(enable=true),
-     choices(
-      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.circular "Circular",
-      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle "Rectangle",
-      choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.other "Other"));
+  input ShapeOfResistance shape=ThermofluidStream.Processes.Internal.ShapeOfResistance.circular "Shape of cross sectional area"
+    annotation (Dialog(enable=true),
+    choices(
+      choice=ThermofluidStream.Processes.Internal.ShapeOfResistance.circular "Circular",
+      choice=ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle "Rectangle",
+      choice=ThermofluidStream.Processes.Internal.ShapeOfResistance.other "Other"));
 
   input SI.Length l(min=0) "Length of component" annotation(Dialog(enable=true));
-  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular)));
+  input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular)));
   input SI.Length a(min=0) = 0 "Rectangle width"
-    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
+    annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle)));
   input SI.Length b(min=0) = 0 "Rectangle height"
-    annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
-  input SI.Length d_h_input = 0 "Custom hydraulic diameter if shape not available" annotation (Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.other)));
+    annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle)));
+  input SI.Length d_h_input = 0 "Custom hydraulic diameter if shape not available" annotation (Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.other)));
 
   input Real Re_laminar(unit "1") = 2000
     "Upper Reynolds number boundary for laminar flow in pipe"
@@ -83,11 +82,11 @@ algorithm
     ks := ks_input;
   end if;
 
-  if geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular then
+  if shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular then
     d_h := 2*r;
-  elseif geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle then
+  elseif shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle then
     d_h := 2*a*b/(a+b);
-  elseif geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.other then
+  elseif shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.other then
     d_h := d_h_input;
   end if;
 

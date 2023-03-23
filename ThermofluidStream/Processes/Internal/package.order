@@ -5,4 +5,4 @@ PartialConductionElement
 InitializationMethodsCondElement
 Material
 PressureDropCorrelation
-GeometryOfResistance
+ShapeOfResistance
