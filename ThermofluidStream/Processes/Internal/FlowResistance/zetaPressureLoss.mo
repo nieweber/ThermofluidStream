@@ -31,7 +31,7 @@ algorithm
   if shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular then
     A_zeta :=Modelica.Constants.pi*r*r;
   elseif shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle then
-    A_zeta := a*b;
+    A_zeta := Modelica.Constants.pi*d_h/4;
   elseif shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.other then
     A_zeta := A;
   end if;

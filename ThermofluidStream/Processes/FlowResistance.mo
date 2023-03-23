@@ -1,6 +1,6 @@
 within ThermofluidStream.Processes;
 model FlowResistance "Flow resistance model"
-  extends Interfaces.SISOFlow(final L=if computeL then 1/(1^2*pi) else L_value, final clip_p_out=true);
+  extends Interfaces.SISOFlow(final L=if computeL then l/(r^2*pi) else L_value, final clip_p_out=true);
 
   import Modelica.Constants.pi "Constant Pi";
 

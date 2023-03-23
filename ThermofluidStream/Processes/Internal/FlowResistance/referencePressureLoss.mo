@@ -5,8 +5,12 @@ function referencePressureLoss "Pressure loss function based on reference values
   input SI.Pressure dp_ref "Reference pressure drop"
     annotation(Dialog(enable=true));
   input SI.MassFlowRate m_flow_ref "Reference mass flow rate" annotation(Dialog(enable=true));
+  input SI.Density rho_ref "Reference density" annotation(Dialog(enable=true));
 
-  input ThermofluidStream.Processes.Internal.ReferencePressureDropFunction dp_corr=ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.linear "Pressure drop function" annotation (Dialog(enable=true), choices(
+
+  input ThermofluidStream.Processes.Internal.ReferencePressureDropFunction dp_function=ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.linear "Pressure drop function"
+  annotation (Dialog(enable=true),
+  choices(
       choice=ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.linear "Linear",
       choice=ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.quadratic "Quadratic",
       choice=ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.customExponent "Custom exponent"));
@@ -15,12 +19,12 @@ function referencePressureLoss "Pressure loss function based on reference values
   annotation(Dialog(enable=(dp_corr == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.customExponent)));
 algorithm
 
-  if dp_corr == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.linear then
-    pressureLoss :=dp_ref*m_flow/m_flow_ref;
-  elseif dp_corr == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.quadratic then
-    pressureLoss := dp_ref*Modelica.Fluid.Utilities.regSquare(m_flow/m_flow_ref);
-  elseif dp_corr == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.customExponent then
-    pressureLoss :=dp_ref*Modelica.Fluid.Utilities.regPow(m_flow/m_flow_ref, m);
+  if dp_function == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.linear then
+    pressureLoss := rho_ref/rho*dp_ref*m_flow/m_flow_ref;
+  elseif dp_function == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.quadratic then
+    pressureLoss := rho_ref/rho*dp_ref*Modelica.Fluid.Utilities.regSquare(m_flow/m_flow_ref);
+  elseif dp_function == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.customExponent then
+    pressureLoss := rho_ref/rho*dp_ref*Modelica.Fluid.Utilities.regPow(m_flow/m_flow_ref, m);
   end if;
 
   annotation (Documentation(info="<html>
