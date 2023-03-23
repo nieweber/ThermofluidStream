@@ -5,7 +5,6 @@ partial function partialPressureLoss
   input SI.Density rho "Medium density";
   input SI.DynamicViscosity mu "Medium dynamic viscosity";
 
-  input SI.Length l(min=0) "Pipe length";
 
   output SI.Pressure pressureLoss "Pressure lost in Pipe";
   output SI.Length d_h "Hydraulic diameter of resistance";

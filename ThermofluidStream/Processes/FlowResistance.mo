@@ -5,7 +5,7 @@ model FlowResistance "Flow resistance model"
   import Modelica.Constants.pi "Constant Pi";
 
   //parameter SI.Radius r(min=0) "Radius of pipe";
-  parameter SI.Length l(min=0) "Length of component";
+  //parameter SI.Length l(min=0) "Length of component";
 
 
   parameter Utilities.Units.Inertance L_value = dropOfCommons.L "Inertance of pipe"
@@ -62,7 +62,7 @@ protected
 
 
 equation
-  dp = -pLoss(m_flow, rho_in, mu_in, l=l);
+  dp = -pLoss(m_flow, rho_in, mu_in);
   h_out = h_in;
   Xi_out = Xi_in;
 

@@ -13,6 +13,7 @@ function laminarTurbulentPressureLossHaaland "Laminar and turbulent flow regimes
       choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle "Rectangle",
       choice=ThermofluidStream.Processes.Internal.GeometryOfResistance.other "Other"));
 
+  input SI.Length l(min=0) "Length of component" annotation(Dialog(enable=true));
   input SI.Length r(min=0) "Pipe radius" annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.circular)));
   input SI.Length a(min=0) = 0 "Rectangle width"
     annotation(Dialog(enable = (geometry == ThermofluidStream.Processes.Internal.GeometryOfResistance.rectangle)));
