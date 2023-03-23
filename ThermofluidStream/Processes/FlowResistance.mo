@@ -1,17 +1,20 @@
 within ThermofluidStream.Processes;
 model FlowResistance "Flow resistance model"
-  extends Interfaces.SISOFlow(final L=if computeL then l/(r^2*pi) else L_value, final clip_p_out=true);
+  extends Interfaces.SISOFlow(final L=if computeL then deltaS/A_inertance else L_value, final clip_p_out=true);
 
   import Modelica.Constants.pi "Constant Pi";
 
   //parameter SI.Radius r(min=0) "Radius of pipe";
   //parameter SI.Length l(min=0) "Length of component";
 
-
+  parameter Boolean computeL = true "Compute L from length and area?"
+    annotation(Dialog(tab="Advanced", group = "Inertance"));
   parameter Utilities.Units.Inertance L_value = dropOfCommons.L "Inertance of pipe"
-    annotation(Dialog(tab="Advanced", enable=not computeL));
-  parameter Boolean computeL = true "Compute L from r and l"
-    annotation(Dialog(tab="Advanced"));
+    annotation(Dialog(tab="Advanced",group = "Inertance", enable=not computeL));
+  parameter SI.Length deltaS = 1 "Length for inertance calculation (L=deltaS/A)"
+    annotation(Dialog(tab="Advanced", group = "Inertance", enable= computeL));
+  parameter SI.Area A_inertance = 1 "Area for inertance calculation (L=deltaS/A)"
+    annotation(Dialog(tab="Advanced", group = "Inertance", enable= computeL));
   parameter SI.Density rho_min = dropOfCommons.rho_min "Minimal input density"
     annotation(Dialog(tab="Advanced"));
   replaceable function pLoss = Internal.FlowResistance.pleaseSelectPressureLoss
