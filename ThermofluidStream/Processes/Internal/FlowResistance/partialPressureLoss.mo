@@ -7,8 +7,10 @@ partial function partialPressureLoss
 
 
   output SI.Pressure pressureLoss "Pressure lost in Pipe";
+  output SI.Area crossSectionArea "Effective cross section area";
   output SI.Length d_h "Hydraulic diameter of resistance";
-  output SI.Length r_h "Hydraulic radius";
+  output SI.Velocity v_mean "Mean flow velocity";
+  //output SI.Length r_h "Hydraulic radius";
 
   //SI.Length r_h "Hydraulic radius";
 
