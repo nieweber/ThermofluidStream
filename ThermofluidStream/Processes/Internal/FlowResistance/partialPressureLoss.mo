@@ -4,6 +4,9 @@ partial function partialPressureLoss
   input SI.MassFlowRate m_flow "Mass flow rate";
   input SI.Density rho "Medium density";
   input SI.DynamicViscosity mu "Medium dynamic viscosity";
+  input SI.Pressure p_out "Pressure at outlet";
+  input SI.Temperature T "Temperature";
+  input SI.SpecificHeatCapacity Rs "Specific gas constant";
 
 
   output SI.Pressure pressureLoss "Pressure lost in Pipe";

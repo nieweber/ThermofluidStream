@@ -56,22 +56,26 @@ some medium properties and the geometry of the pipe.
 </p>
 </html>"));
 
-  Internal.pressureLossSummary dp_summary "Detailed pressure drop values";
+  //Internal.pressureLossSummary dp_summary "Detailed pressure drop values";
 
 protected
   SI.Density rho_in = max(rho_min, Medium.density(inlet.state))
     "density of medium entering";
+  SI.Density rho_out = max(rho_min, Medium.density(outlet.state))
+    "density of medium exiting";
   SI.DynamicViscosity mu_in = Medium.dynamicViscosity(inlet.state)
     "dynamic viscosity of medium entering";
   //SI.Length r_h;
+  SI.Temperature T_in = Medium.temperature(inlet.state);
+  SI.SpecificHeatCapacity Rs = Modelica.Constants.R/Medium.molarMass(inlet.state);
 
 
 equation
-  //(dp, dp_summary.zeta) = -pLoss(m_flow, rho_in, mu_in);
+  dp = -pLoss(m_flow, rho_in, mu_in, p_out, T_in, Rs);
   h_out = h_in;
   Xi_out = Xi_in;
 
-  (dp, dp_summary.zeta) = pLoss(m_flow, rho_in, mu_in);
+  //(dp, dp_summary.zeta) = pLoss(m_flow, rho_in, mu_in);
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={

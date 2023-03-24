@@ -21,6 +21,8 @@ function zetaPressureLoss "Pressure loss function based on zeta value"
   input Real zeta( unit = "1") "Zeta value of component"
     annotation(Dialog(enable=true));
 
+  input Boolean compressible = true "Use pressure loss function for compressible Media?"
+    annotation (Dialog(enable = true));
 protected
   SI.Area A_zeta "Reference area either from radius or set by parameter";
 
@@ -36,8 +38,11 @@ algorithm
     A_zeta := A;
   end if;
 
-  pressureLoss :=zeta/(2*rho)*Modelica.Fluid.Utilities.regSquare(m_flow/A_zeta);
-
+  if compressible then
+    pressureLoss := p_out - (p_out*p_out+zeta*Rs*T*Modelica.Fluid.Utilities.regSquare(m_flow/A_zeta))^0.5;
+  else
+    pressureLoss :=zeta/(2*rho)*Modelica.Fluid.Utilities.regSquare(m_flow/A_zeta);
+  end if;
 
   annotation (Documentation(info="<html>
 <p>For specific components (armatures, fittings, pipe sections, grids, ...), the zeta value is often given in the data sheet.</p>
