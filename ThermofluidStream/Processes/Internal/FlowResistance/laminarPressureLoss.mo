@@ -20,7 +20,7 @@ function laminarPressureLoss
     annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle)));
   input SI.Length d_h_input = 0 "Custom hydraulic diameter if shape not available" annotation (Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.other)));
 
-  input Boolean useMeanDensity = true "Use mean density for dp calculation?" annotation(Evaluate = true, Dialog(enable = true));
+  input Boolean useMeanDensity = false "Use mean density for dp calculation?" annotation(Evaluate = true, Dialog(enable = true));
 
   import Modelica.Constants.pi;
 protected
@@ -57,8 +57,6 @@ algorithm
   result.A :=hydraulicArea;
   result.d_h :=d_h;
   result.v := m_flow/(rho*hydraulicArea);
-
-
 
 
   annotation (Documentation(info="<html>

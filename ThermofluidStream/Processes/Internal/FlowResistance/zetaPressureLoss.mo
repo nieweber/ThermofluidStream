@@ -21,7 +21,7 @@ function zetaPressureLoss "Pressure loss function based on zeta value"
   input Real zeta( unit = "1") "Zeta value of component"
     annotation(Dialog(enable=true));
 
-  input Boolean compressible = true "Use pressure loss function for compressible Media?"
+  input Boolean compressible = false "Use pressure loss function for compressible Media?"
     annotation (Dialog(enable = true));
 
 
