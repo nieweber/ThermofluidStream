@@ -9,7 +9,8 @@ function linearQuadraticPressureLoss
     annotation(Dialog(enable=true));
 
 algorithm
-  pressureLoss :=k*m_flow + k2*m_flow*abs(m_flow);
+  result.dp :=k*m_flow + k2*m_flow*abs(m_flow);
+  result.d_h := 0;
 
   annotation (Documentation(info="<html>
 <p>

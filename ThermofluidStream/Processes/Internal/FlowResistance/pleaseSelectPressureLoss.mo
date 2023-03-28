@@ -5,7 +5,7 @@ function pleaseSelectPressureLoss "Please select pressure loss function"
 algorithm
   assert(false, "please select pressure loss function");
 
-  pressureLoss :=0;
+  result.dp :=0;
 
   annotation (Documentation(info="<html>
 <p>

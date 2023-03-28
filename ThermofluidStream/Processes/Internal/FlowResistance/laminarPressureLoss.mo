@@ -20,7 +20,12 @@ function laminarPressureLoss
     annotation(Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle)));
   input SI.Length d_h_input = 0 "Custom hydraulic diameter if shape not available" annotation (Dialog(enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.other)));
 
+  input Boolean useMeanDensity = true "Use mean density for dp calculation?" annotation(Evaluate = true, Dialog(enable = true));
+
   import Modelica.Constants.pi;
+protected
+  SI.Density rho_mean "Mean density";
+  SI.Area hydraulicArea "Hydraulic cross section area";
 
 algorithm
 
@@ -38,7 +43,23 @@ algorithm
     r_h :=r;
   end if;
 
-  pressureLoss := m_flow * (8*mu*l)/(pi*rho*r_h^4);
+  rho_mean :=0.5*(rho_in + rho_out);
+  hydraulicArea := pi*r_h^2;
+
+  if not useMeanDensity then
+  result.dp := m_flow * (8*mu*l)/(pi*rho*r_h^4);
+  else
+  result.dp := m_flow * (8*mu*l)/(pi*rho_mean*r_h^4);
+  //result.dp := m_flow * (8*mu*l)/(pi*rho*r_h^4);
+  //result.dp := p_out - sqrt(p_out*p_out+16*mu*Rs*T*m_flow*l/(pi*r_h^4));
+  end if;
+
+  result.A :=hydraulicArea;
+  result.d_h :=d_h;
+  result.v_mean := m_flow/(rho*hydraulicArea);
+
+
+
 
   annotation (Documentation(info="<html>
 <p>

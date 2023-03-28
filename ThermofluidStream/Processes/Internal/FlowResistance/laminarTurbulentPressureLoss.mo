@@ -60,19 +60,36 @@ algorithm
     ks :=ks_input;
   end if;
 
-  assert(ks <r, "ks must be smaller than r");
+  assert(ks <r_h, "ks must be smaller than r");
 
-  u :=m_flow/(r^2*pi*rho);
+  if shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular then
+    d_h := 2*r;
+  elseif shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle then
+    d_h := 2*a*b/(a+b);
+  elseif shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.other then
+    d_h := d_h_input;
+  end if;
+
+  if not shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular then
+    r_h :=d_h/4;
+  else
+    r_h :=r;
+  end if;
+
+  u :=m_flow/(r_h^2*pi*rho);
   // add eps to Re to avoid 0^0 error in computation of lambda_aux for Re=0 (-> a=1).
-  Re :=abs(u)*rho*2*r/mu + eps;
+  Re :=abs(u)*rho*2*r_h/mu + eps;
 
   // cheng 2008. Formulas for Friction Factor in Transitional Regimes. Journal of Hydraulic Engineering.
   a_factor := 1/(1 + (Re/2720)^9);
-  b_factor := 1/(1 + (Re/(160*2*r/ks))^2);
+  b_factor := 1/(1 + (Re/(160*2*r_h/ks))^2);
   //compute lambda_aux = Re*lambda to avoid devision by zero at Re=0 and to avoid if-else
-  lambda_aux :=64^a_factor*Re^(1 - a_factor)*((1.8*log10(Re/6.8))^(2*(a_factor - 1)*b_factor)*(2*log10(3.7*2*r/ks))^(2*(a_factor - 1)*(1 - b_factor)));
+  lambda_aux :=64^a_factor*Re^(1 - a_factor)*((1.8*log10(Re/6.8))^(2*(a_factor - 1)*b_factor)*(2*log10(3.7*2*r_h/ks))^(2*(a_factor - 1)*(1 - b_factor)));
 
-  pressureLoss := lambda_aux*l*mu*u/(8*r^2);
+  result.dp := lambda_aux*l*mu*u/(8*r_h^2);
+  result.d_h := d_h;
+  result.v_mean := u;
+  result.A := pi*(d_h^2)/4;
 
   annotation (Documentation(info="<html>
 <p>Pressure loss after after&nbsp;Darcy&ndash;Weisbach, which is valid in laminar and turbulent flow regimes.</p>

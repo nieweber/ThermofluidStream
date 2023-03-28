@@ -3,17 +3,21 @@ partial function partialPressureLoss
   "Interface for pressure loss functions"
   input SI.MassFlowRate m_flow "Mass flow rate";
   input SI.Density rho "Medium density";
+  input SI.Density rho_in "Medium density";
+  input SI.Density rho_out "Medium density";
   input SI.DynamicViscosity mu "Medium dynamic viscosity";
   input SI.Pressure p_out "Pressure at outlet";
   input SI.Temperature T "Temperature";
   input SI.SpecificHeatCapacity Rs "Specific gas constant";
 
+  output dpRecord result "Collects results";
 
-  output SI.Pressure pressureLoss "Pressure lost in Pipe";
-  output SI.Area crossSectionArea "Effective cross section area";
-  output SI.Length d_h "Hydraulic diameter of resistance";
-  output SI.Velocity v_mean "Mean flow velocity";
-  //output SI.Length r_h "Hydraulic radius";
+  //output SI.Pressure pressureLoss "Pressure lost in Pipe";
+  //output SI.Area crossSectionArea "Effective cross section area";
+protected
+  SI.Length d_h "Hydraulic diameter of resistance";
+  //output SI.Velocity v_mean "Mean flow velocity";
+  SI.Length r_h "Hydraulic radius";
 
   //SI.Length r_h "Hydraulic radius";
 

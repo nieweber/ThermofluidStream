@@ -20,11 +20,11 @@ function referencePressureLoss "Pressure loss function based on reference values
 algorithm
 
   if dp_function == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.linear then
-    pressureLoss := rho_ref/rho*dp_ref*m_flow/m_flow_ref;
+    result.dp := rho_ref/rho*dp_ref*m_flow/m_flow_ref;
   elseif dp_function == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.quadratic then
-    pressureLoss := rho_ref/rho*dp_ref*Modelica.Fluid.Utilities.regSquare(m_flow/m_flow_ref);
+    result.dp := rho_ref/rho*dp_ref*Modelica.Fluid.Utilities.regSquare(m_flow/m_flow_ref);
   elseif dp_function == ThermofluidStream.Processes.Internal.ReferencePressureDropFunction.customExponent then
-    pressureLoss := rho_ref/rho*dp_ref*Modelica.Fluid.Utilities.regPow(m_flow/m_flow_ref, m);
+    result.dp := rho_ref/rho*dp_ref*Modelica.Fluid.Utilities.regPow(m_flow/m_flow_ref, m);
   end if;
 
   annotation (Documentation(info="<html>
