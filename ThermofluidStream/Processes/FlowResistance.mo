@@ -56,7 +56,7 @@ some medium properties and the geometry of the pipe.
 </p>
 </html>"));
 
-  Internal.dpRecord result "Values from pressure drop calculation";
+  Internal.dpRecord pressureDropCalculation "Values from pressure drop calculation";
 protected
   SI.Density rho_in = max(rho_min, Medium.density(inlet.state))
     "density of medium entering";
@@ -70,8 +70,8 @@ protected
 
 
 equation
-  result = pLoss(m_flow, rho_in, rho_in, rho_out, mu_in, p_out, T_in, Rs);
-  dp = -result.dp;
+  pressureDropCalculation = pLoss(m_flow, rho_in, rho_out, mu_in, p_out, T_in, Rs);
+  dp = -pressureDropCalculation.dp;
   h_out = h_in;
   Xi_out = Xi_in;
 

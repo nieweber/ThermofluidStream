@@ -48,7 +48,7 @@ algorithm
 
   result.zeta :=zeta;
   result.A := A_zeta;
-  result.v_mean := m_flow/(rho*A_zeta);
+  result.v := m_flow/(rho*A_zeta);
 
   annotation (Documentation(info="<html>
 <p>For specific components (armatures, fittings, pipe sections, grids, ...), the zeta value is often given in the data sheet.</p>

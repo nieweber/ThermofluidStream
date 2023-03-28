@@ -60,7 +60,6 @@ algorithm
     ks :=ks_input;
   end if;
 
-  assert(ks <r_h, "ks must be smaller than r");
 
   if shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular then
     d_h := 2*r;
@@ -76,6 +75,8 @@ algorithm
     r_h :=r;
   end if;
 
+  assert(ks <r_h, "ks must be smaller than r");
+
   u :=m_flow/(r_h^2*pi*rho);
   // add eps to Re to avoid 0^0 error in computation of lambda_aux for Re=0 (-> a=1).
   Re :=abs(u)*rho*2*r_h/mu + eps;
@@ -88,7 +89,7 @@ algorithm
 
   result.dp := lambda_aux*l*mu*u/(8*r_h^2);
   result.d_h := d_h;
-  result.v_mean := u;
+  result.v := u;
   result.A := pi*(d_h^2)/4;
 
   annotation (Documentation(info="<html>

@@ -53,8 +53,8 @@ function laminarTurbulentPressureLossHaaland "Laminar and turbulent flow regimes
 protected
   SI.Length ks "pipe roughness";
 
-  SI.Area area=pi*(d_h^2)/4 "Area of Pipe";
-  Real relative_roughness=ks/d_h "Relative Roughness of Pipe";
+  SI.Area area "Area of Pipe";
+  Real relative_roughness "Relative Roughness of Pipe";
 
   Real Re_abs "absolute value of Reynolds number";
   Real Re_abs_limited "limited absolute value of Reynolds number";
@@ -90,6 +90,9 @@ algorithm
     d_h := d_h_input;
   end if;
 
+  area:=pi*(d_h^2)/4;
+  relative_roughness:=ks/d_h;
+
   // absolute Reynolds number
   Re_abs := abs(m_flow)*d_h/(area*mu);
   Re_abs_limited := max(eps, min(1, Re_abs));
@@ -110,7 +113,7 @@ algorithm
 
   result.A := area;
   result.d_h := d_h;
-  result.v_mean := m_flow/(rho*area);
+  result.v := m_flow/(rho*area);
 
   annotation (Documentation(info="<html>
 <p>Pressure loss after&nbsp;Darcy&ndash;Weisbach, which is valid in laminar and turbulent flow regimes.</p>

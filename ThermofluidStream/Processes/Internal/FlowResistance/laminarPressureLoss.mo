@@ -43,7 +43,7 @@ algorithm
     r_h :=r;
   end if;
 
-  rho_mean :=0.5*(rho_in + rho_out);
+  rho_mean :=0.5*(rho + rho_out);
   hydraulicArea := pi*r_h^2;
 
   if not useMeanDensity then
@@ -56,7 +56,7 @@ algorithm
 
   result.A :=hydraulicArea;
   result.d_h :=d_h;
-  result.v_mean := m_flow/(rho*hydraulicArea);
+  result.v := m_flow/(rho*hydraulicArea);
 
 
 

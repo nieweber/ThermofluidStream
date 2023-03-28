@@ -2,9 +2,8 @@ within ThermofluidStream.Processes.Internal.FlowResistance;
 partial function partialPressureLoss
   "Interface for pressure loss functions"
   input SI.MassFlowRate m_flow "Mass flow rate";
-  input SI.Density rho "Medium density";
-  input SI.Density rho_in "Medium density";
-  input SI.Density rho_out "Medium density";
+  input SI.Density rho "Medium density at inlet";
+  input SI.Density rho_out "Medium density at outlet";
   input SI.DynamicViscosity mu "Medium dynamic viscosity";
   input SI.Pressure p_out "Pressure at outlet";
   input SI.Temperature T "Temperature";
@@ -14,12 +13,12 @@ partial function partialPressureLoss
 
   //output SI.Pressure pressureLoss "Pressure lost in Pipe";
   //output SI.Area crossSectionArea "Effective cross section area";
-protected
-  SI.Length d_h "Hydraulic diameter of resistance";
+  //SI.Length d_h "Hydraulic diameter of resistance";
   //output SI.Velocity v_mean "Mean flow velocity";
+protected
   SI.Length r_h "Hydraulic radius";
 
-  //SI.Length r_h "Hydraulic radius";
+  SI.Length d_h "Hydraulic radius";
 
   annotation(Inline=true, smoothOrder=100,
     Documentation(info="<html>
