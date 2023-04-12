@@ -11,7 +11,7 @@ model FlowResistance "Flow resistance model"
       choice=ThermofluidStream.Processes.Internal.ShapeOfResistance.rectangle "Rectangle",
       choice=ThermofluidStream.Processes.Internal.ShapeOfResistance.other "Other"));
 
-  parameter SI.Length l(min=0) "Length of pipe" annotation (Dialog(group = "Geometry"));
+  parameter SI.Length l(min=0) "Length of resistance" annotation (Dialog(group = "Geometry"));
   parameter SI.Radius r(min=0) = 0 "Radius of pipe"
   annotation (Dialog(group = "Geometry", enable=(shape == ThermofluidStream.Processes.Internal.ShapeOfResistance.circular)));
   parameter SI.Length a(min=0) = 0 "Rectangle width"
