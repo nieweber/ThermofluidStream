@@ -8,11 +8,11 @@ partial model PartialConductionElementHEX "Parent for CEs for discretizedHEX"
 
     parameter Integer nCellsParallel = 1 "Number of parallel discretization elements";
 
-    constant SI.CoefficientOfHeatTransfer U_min = 1 "Minimum heat transfer coefficient for temperature adaption at zero massflow";
+    constant SI.CoefficientOfHeatTransfer alpha_min = 1 "Minimum heat transfer coefficient for temperature adaption at zero massflow";
 
-    SI.CoefficientOfHeatTransfer U "Heat transfer coefficient to medium";
+    SI.CoefficientOfHeatTransfer alpha "Heat transfer coefficient to medium";
 equation
-  k = U*A;
+  k = alpha*A;
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(coordinateSystem(preserveAspectRatio=false)));
 end PartialConductionElementHEX;

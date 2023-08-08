@@ -5,9 +5,9 @@ model ConductionElementHEX_twoPhase "ConductionElement for two-phase fluids"
 
   import Modelica.Math;
 
-  parameter SI.CoefficientOfHeatTransfer U_liq_nom = 700 "Nominal coefficient of heat transfer for liquid region";
-  parameter SI.CoefficientOfHeatTransfer U_vap_nom = 500 "Nominal coefficient of heat transfer for vapour region";
-  parameter SI.CoefficientOfHeatTransfer U_tp_nom = 1000 "Nominal coefficient of heat transfer for two-phase region";
+  parameter SI.CoefficientOfHeatTransfer alpha_liq_nom = 700 "Nominal coefficient of heat transfer for liquid region";
+  parameter SI.CoefficientOfHeatTransfer alpha_vap_nom = 500 "Nominal coefficient of heat transfer for vapour region";
+  parameter SI.CoefficientOfHeatTransfer alpha_tp_nom = 1000 "Nominal coefficient of heat transfer for two-phase region";
 
   parameter SI.MassFlowRate m_flow_nom = 0.3 "Nominal mass-flow rate for heat transfer calculation";
   parameter SI.MassFraction delta_x = 0.05 "Value for interpolation width";
@@ -18,9 +18,9 @@ model ConductionElementHEX_twoPhase "ConductionElement for two-phase fluids"
   Real x "Vapor quality calculated from enthalpies";
 
 protected
-  SI.CoefficientOfHeatTransfer U_liq "Coefficient of heat transfer for liquid region";
-  SI.CoefficientOfHeatTransfer U_tp "Coefficient of heat transfer for two-phase region";
-  SI.CoefficientOfHeatTransfer U_vap "Coefficient of heat transfer for vapour region";
+  SI.CoefficientOfHeatTransfer alpha_liq "Coefficient of heat transfer for liquid region";
+  SI.CoefficientOfHeatTransfer alpha_tp "Coefficient of heat transfer for two-phase region";
+  SI.CoefficientOfHeatTransfer alpha_vap "Coefficient of heat transfer for vapour region";
 
   SI.SpecificEnthalpy h_dew = Medium.dewEnthalpy(Medium.setSat_p(Medium.pressure(state))) "Dew enthalpy at inlet";
   SI.SpecificEnthalpy h_bubble = Medium.bubbleEnthalpy(Medium.setSat_p(Medium.pressure(state))) "Bubble enthalpy at inlet";
@@ -33,17 +33,17 @@ equation
   //1) Calculated from enthalpies --> can go below zero and above one (needed for heat transfer calculations)!
   x = (h - h_bubble)/(h_dew - h_bubble);
 
-  U_liq = max(U_min, U_liq_nom*(abs(m_flow)/(m_flow_nom/nCellsParallel))^Re_exp_cond);
-  U_vap = max(U_min, U_vap_nom*(abs(m_flow)/(m_flow_nom/nCellsParallel))^Re_exp_evap);
-  U_tp = max(U_min, U_tp_nom);
+  alpha_liq = max(alpha_min, alpha_liq_nom*(abs(m_flow)/(m_flow_nom/nCellsParallel))^Re_exp_cond);
+  alpha_vap = max(alpha_min, alpha_vap_nom*(abs(m_flow)/(m_flow_nom/nCellsParallel))^Re_exp_evap);
+  alpha_tp = max(alpha_min, alpha_tp_nom);
 
   //Coefficient of heat transfer dependent on vapor quality (interpolation in phase-transition regions)
-  U = smooth(1, noEvent(
-      if x < -delta_x then U_liq
-      elseif x < delta_x then U_liq + 0.5*(U_tp - U_liq)*(1 + Math.sin(x*Modelica.Constants.pi/(2*delta_x)))
-      elseif x < 1 - delta_x then U_tp
-      elseif x < 1 + delta_x then U_tp + 0.5*(U_vap - U_tp)*(1 + Math.sin((x - 1)*Modelica.Constants.pi/(2*delta_x)))
-      else U_vap));
+  alpha = smooth(1, noEvent(
+      if x < -delta_x then alpha_liq
+      elseif x < delta_x then alpha_liq + 0.5*(alpha_tp - alpha_liq)*(1 + Math.sin(x*Modelica.Constants.pi/(2*delta_x)))
+      elseif x < 1 - delta_x then alpha_tp
+      elseif x < 1 + delta_x then alpha_tp + 0.5*(alpha_vap - alpha_tp)*(1 + Math.sin((x - 1)*Modelica.Constants.pi/(2*delta_x)))
+      else alpha_vap));
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
        Line(
@@ -167,7 +167,7 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <p>Undirected implementation of the Conduction Element for the DiscritizedHex.</p>
-<p>Concerning the heat transfer coefficient it is assumed, that the main term influencing the coefficient of heat transfer is the mass flow rate. Therefore a nominal value for the heat transfer coefficient at a nominal mass flow rate can be set. The reynolds exponents for normalization of the heat transfer coefficient for evaporation and condensation are taken from Yan, Yi-Yie, &amp; Lin, T.-F. (1999). Condensation heat transfer and pressure drop of refrigerant R-134a in a small pipe. International Journal of Heat and Mass Transfer, 42(4) and Yan, Y.-Y., &amp; Lin, T.-F. (1999). Evaporation Heat Transfer and Pressure Drop of Refrigerant R-134a in a Plate Heat Exchanger. Journal of Heat Transfer, 121(1). Furthermore a minimum value U_min for the coefficient of heat transfer is set to ensure heat transfer at zero mass flow.</p>
+<p>Concerning the heat transfer coefficient it is assumed, that the main term influencing the coefficient of heat transfer is the mass flow rate. Therefore a nominal value for the heat transfer coefficient at a nominal mass flow rate can be set. The reynolds exponents for normalization of the heat transfer coefficient for evaporation and condensation are taken from Yan, Yi-Yie, &amp; Lin, T.-F. (1999). Condensation heat transfer and pressure drop of refrigerant R-134a in a small pipe. International Journal of Heat and Mass Transfer, 42(4) and Yan, Y.-Y., &amp; Lin, T.-F. (1999). Evaporation Heat Transfer and Pressure Drop of Refrigerant R-134a in a Plate Heat Exchanger. Journal of Heat Transfer, 121(1). Furthermore a minimum value alpha_min for the coefficient of heat transfer is set to ensure heat transfer at zero mass flow.</p>
 <p>For further documentation see the documentation of the motherclass.</p>
 </html>"));
 end ConductionElementHEX_twoPhase;

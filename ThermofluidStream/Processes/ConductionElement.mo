@@ -2,18 +2,18 @@ within ThermofluidStream.Processes;
 model ConductionElement "Element with quasi-stationary mass and heatport"
   extends Internal.PartialConductionElement;
 
-  parameter Boolean resistanceFromAU = true
-    "= true, if thermal conductance given by U*A"
+  parameter Boolean resistanceFromAlphaA = true
+    "= true, if thermal conductance given by alpha*A"
     annotation(Dialog(group="Thermal Conductance"));
   parameter SI.Area A = 1 "Contact area of element with medium"
     annotation(Dialog(group="Thermal Conductance", enable=resistanceFromAU));
-  parameter SI.CoefficientOfHeatTransfer U = 200 "Heat transfer coefficient to medium"
+  parameter SI.CoefficientOfHeatTransfer alpha = 200 "Heat transfer coefficient to medium"
     annotation(Dialog(group="Thermal Conductance", enable=resistanceFromAU));
   parameter SI.ThermalConductance k_par = 200 "Thermal conductance heatport->fluid"
     annotation(Dialog(group="Thermal Conductance", enable=not resistanceFromAU));
 
 equation
-  k = (if noEvent(resistanceFromAU) then U*A else k_par);
+  k = (if noEvent(resistanceFromAlphaA) then alpha*A else k_par);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

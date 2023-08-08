@@ -2,14 +2,14 @@ within ThermofluidStream.HeatExchangers.Internal;
 model ConductionElementHEX "ConductionElement for single-phase fluids"
   extends PartialConductionElementHEX;
 
-  parameter SI.CoefficientOfHeatTransfer U_nom = 3000 "Nominal coefficient of heat transfer";
+  parameter SI.CoefficientOfHeatTransfer alpha_nom = 3000 "Nominal coefficient of heat transfer";
   parameter SI.MassFlowRate m_flow_nom = 1 "Nominal mass-flow rate for heat transfer calculation";
 
   constant Real Re_exp(unit="1") = 0.8 "Reynolds-exponent for heat transfer calculation";
 
 equation
   //Estimation of heat transfer coefficient
-  U = max(U_min, U_nom*(abs(m_flow/(m_flow_nom/nCellsParallel)))^Re_exp);
+  alpha = max(alpha_min, alpha_nom*(abs(m_flow/(m_flow_nom/nCellsParallel)))^Re_exp);
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
