@@ -65,3 +65,20 @@ convertElement({"ThermofluidStream.Interfaces.SISOFlow",
                 "ThermofluidStream.Undirected.Processes.TransportDelay",
                 "ThermofluidStream.Undirected.Processes.Internal.PartialConductionElement"},
                "m_acceleraton_0", "m_acceleration_0");
+
+//Changes due to renamed elements
+convertElement({"ThermofluidStream.Processes.ConductionElement",
+                "ThermofluidStream.Undirected.Processes.ConductionElement"},
+               {"resistanceFromAU", "U"}, {"resistanceFromAlphaA", "alpha"});
+
+convertElement({"ThermofluidStream.HeatExchangers.Internal.ConductionElementHEX",
+                "ThermofluidStream.Undirected.HeatExchangers.Internal.ConductionElementHEX"},
+               {"U_nom", "U", "U_min"}, {"alpha_nom", "alpha", "alpha_min"});
+
+convertElement({"ThermofluidStream.HeatExchangers.Internal.PartialConductionElementHEX",
+                "ThermofluidStream.Undirected.HeatExchangers.Internal.PartialConductionElementHEX"},
+               {"U_min", "U"}, {"alpha_min", "alpha"});
+
+convertElement({"ThermofluidStream.HeatExchangers.Internal.ConductionElementHEX_twoPhase",
+                "ThermofluidStream.Undirected.HeatExchangers.Internal.ConductionElementHEX_twoPhase"},
+               {"U_liq_nom", "U_vap_nom", "U_tp_nom", "U_liq", "U_tp", "U_vap", "U", "U_min"}, {"alpha_liq_nom", "alpha_vap_nom", "alpha_tp_nom", "alpha_liq", "alpha_tp", "alpha_vap", "alpha", "alpha_min"});
