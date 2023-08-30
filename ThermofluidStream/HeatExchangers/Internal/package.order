@@ -6,3 +6,4 @@ DiscretizedHexIcon
 calculateEfficiency
 PartialDiscretizedHEX
 PartialNTU
+TemperatureCrossingObserver
