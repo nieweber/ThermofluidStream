@@ -15,6 +15,9 @@ model ConductionElement "Element with quasi-stationary mass and heatport"
 equation
   k = (if noEvent(resistanceFromAU) then U*A else k_par);
 
+  DT1 = T_heatPort - T1 "Temperature difference 1";
+  DT2 = T_heatPort - T2 "Temperature difference 2";
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>

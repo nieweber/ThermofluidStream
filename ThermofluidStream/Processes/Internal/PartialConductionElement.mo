@@ -31,8 +31,8 @@ partial model PartialConductionElement "Element with quasi-stationary mass and h
 
   SI.Temperature T1 = Medium.temperature(inlet.state) "Temperature at inlet";
   SI.Temperature T2 = Medium.temperature(state) "Temperature at outlet";
-  SI.Temperature DT1 = T_heatPort - T1 "Temperature difference 1";
-  SI.Temperature DT2 = T_heatPort - T2 "Temperature difference 2";
+  SI.Temperature DT1 "Temperature difference 1";
+  SI.Temperature DT2 "Temperature difference 2";
 
   Real Tcross "Variable to indicate temperature crossing";
 
