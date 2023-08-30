@@ -4,8 +4,10 @@ model TemperatureCrossingObserver
   Modelica.Blocks.Interfaces.RealOutput temperatureCrossing
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
-  SI.TemperatureDifference DT1;
-  SI.TemperatureDifference DT2;
+  Modelica.Blocks.Interfaces.RealOutput DT1(unit = "K")
+    annotation (Placement(transformation(extent={{100,40},{120,60}}), iconTransformation(extent={{100,40},{120,60}})));
+  Modelica.Blocks.Interfaces.RealOutput DT2(unit = "K")
+    annotation (Placement(transformation(extent={{100,-60},{120,-40}}), iconTransformation(extent={{100,-60},{120,-40}})));
 
   Modelica.Blocks.Interfaces.RealInput TinA(unit = "K") "Temperature at inlet A"
     annotation (Placement(transformation(extent={{-120,-50},{-80,-10}})));
@@ -31,22 +33,28 @@ equation
         Ellipse(extent={{-10,46},{60,-24}}, lineColor={28,108,200}),
         Polygon(points={{-50,-36},{-6,-6},{0,-14},{-44,-44},{-50,-36}}, lineColor={28,108,200}),
         Line(points={{12,26},{40,-2}}, color={28,108,200}),
-        Line(points={{40,-2},{38,8}}, color={28,108,200}),
         Line(points={{30,0},{40,-2}}, color={28,108,200}),
         Line(
           points={{-3,-3},{7,-1}},
-          color={28,108,200},
+          color={255,0,0},
           origin={31,29},
           rotation=360),
         Line(
-          points={{-3,-4},{-1,6}},
-          color={28,108,200},
-          origin={39,22},
-          rotation=360),
-        Line(
           points={{-14,14},{14,-14}},
-          color={28,108,200},
+          color={255,0,0},
           origin={24,14},
-          rotation=90)}),
+          rotation=90),
+        Polygon(
+          points={{46,30},{8,-8},{10,-2},{4,-4},{32,24},{22,26},{46,30}},
+          pattern=LinePattern.None,
+          lineThickness=1,
+          fillColor={28,108,200},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{46,-8},{8,30},{10,24},{4,26},{32,-2},{22,-4},{46,-8}},
+          pattern=LinePattern.None,
+          lineThickness=1,
+          fillColor={238,46,47},
+          fillPattern=FillPattern.Solid)}),
       Diagram(coordinateSystem(preserveAspectRatio=false)));
 end TemperatureCrossingObserver;
