@@ -26,35 +26,28 @@ equation
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
-          extent={{-100,100},{100,-100}},
+          extent={{-98,100},{102,-100}},
           lineColor={28,108,200},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),
-        Ellipse(extent={{-10,46},{60,-24}}, lineColor={28,108,200}),
-        Polygon(points={{-50,-36},{-6,-6},{0,-14},{-44,-44},{-50,-36}}, lineColor={28,108,200}),
-        Line(points={{12,26},{40,-2}}, color={28,108,200}),
-        Line(points={{30,0},{40,-2}}, color={28,108,200}),
-        Line(
-          points={{-3,-3},{7,-1}},
-          color={255,0,0},
-          origin={31,29},
-          rotation=360),
-        Line(
-          points={{-14,14},{14,-14}},
-          color={255,0,0},
-          origin={24,14},
-          rotation=90),
-        Polygon(
-          points={{46,30},{8,-8},{10,-2},{4,-4},{32,24},{22,26},{46,30}},
-          pattern=LinePattern.None,
-          lineThickness=1,
-          fillColor={28,108,200},
+        Polygon(points={{-72,-54},{-16,-14},{-10,-20},{-58,-68},{-72,-54}},
+                                                                        lineColor={0,0,0},
+          fillColor={135,135,135},
+          fillPattern=FillPattern.Solid),
+        Ellipse(extent={{-28,74},{80,-30}}, lineColor={0,0,0},
+          fillColor={255,255,255},
           fillPattern=FillPattern.Solid),
         Polygon(
-          points={{46,-8},{8,30},{10,24},{4,26},{32,-2},{22,-4},{46,-8}},
+          points={{60,-8},{-2,54},{-2,50},{-6,50},{46,-2},{36,-4},{60,-8}},
           pattern=LinePattern.None,
           lineThickness=1,
           fillColor={238,46,47},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{60,54},{-2,-8},{-2,-4},{-6,-4},{46,48},{36,50},{60,54}},
+          pattern=LinePattern.None,
+          lineThickness=1,
+          fillColor={28,108,200},
           fillPattern=FillPattern.Solid)}),
       Diagram(coordinateSystem(preserveAspectRatio=false)));
 end TemperatureCrossingObserver;
