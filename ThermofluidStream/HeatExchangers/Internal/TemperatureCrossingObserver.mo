@@ -19,8 +19,11 @@ model TemperatureCrossingObserver
     annotation (Placement(transformation(extent={{-120,10},{-80,50}})));
 equation
 
-  DT1 = TinA - ToutB;
-  DT2 = ToutA - TinB;
+  //DT1 = TinA - ToutB;
+  //DT2 = ToutA - TinB;
+
+  DT1 = TinB - ToutA;
+  DT2 = ToutB - TinA;
 
   temperatureCrossing = DT1*DT2;
 

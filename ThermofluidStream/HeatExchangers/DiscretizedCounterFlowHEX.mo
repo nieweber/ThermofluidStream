@@ -49,10 +49,10 @@ equation
   end for;
 
     for i in 1:nCells loop
-    connect(thermalElementA[i].outlet, TsensorA[i].inlet);
+    connect(thermalElementA[i].outlet, TsensorA[i+1].inlet);
   end for;
 
-  connect(inletA, TsensorA[nCells+1].inlet);
+  connect(inletA, TsensorA[1].inlet);
 
   for i in 1:nCells loop
     connect(thermalElementB[i].outlet, TsensorB[i+1].inlet);
@@ -62,16 +62,20 @@ equation
   for i in 1:nCells loop
     connect(temperatureCrossingObserver[i].TinB, TsensorB[i].value_out);
     connect(temperatureCrossingObserver[i].ToutB, TsensorB[i+1].value_out);
-    connect(temperatureCrossingObserver[i].TinA, TsensorA[i+1].value_out);
-    connect(temperatureCrossingObserver[i].ToutA, TsensorA[i].value_out);
+    connect(temperatureCrossingObserver[i].TinA, TsensorA[nCells + 1 - i].value_out);
+    connect(temperatureCrossingObserver[i].ToutA, TsensorA[nCells + 2 - i].value_out);
   end for;
 
   //connect(temperatureCrossingObserver.DT1, thermalElementB.DT1_input);
 
-  connect(temperatureCrossingObserver.DT1, thermalElementB.DT1_input) annotation (Line(points={{-63,3},{-70,3},{-70,96},{-5,96},{-5,90}}, color={0,0,127}));
-  connect(temperatureCrossingObserver.DT2, thermalElementB.DT2_input) annotation (Line(points={{-63,-7},{-84,-7},{-84,98},{5,98},{5,90}}, color={0,0,127}));
-  connect(temperatureCrossingObserver.DT1, thermalElementA.DT1_input) annotation (Line(points={{-63,3},{-76,3},{-76,-98},{5,-98},{5,-90}}, color={0,0,127}));
-  connect(temperatureCrossingObserver.DT2, thermalElementA.DT2_input) annotation (Line(points={{-63,-7},{-70,-7},{-70,-96},{-5,-96},{-5,-90}}, color={0,0,127}));
+  connect(temperatureCrossingObserver.DT1, thermalElementB.DT1_input);
+  connect(temperatureCrossingObserver.DT2, thermalElementB.DT2_input);
+
+  for i in 1:nCells loop
+  connect(temperatureCrossingObserver[i].DT1, thermalElementA[nCells + 1 -i].DT1_input);
+  connect(temperatureCrossingObserver[i].DT2, thermalElementA[nCells + 1 -i].DT2_input);
+  end for;
+
   annotation (Icon(graphics={
         Text(
           extent={{-70,76},{-58,64}},
