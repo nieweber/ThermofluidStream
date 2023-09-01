@@ -31,8 +31,8 @@ partial model PartialConductionElement "Element with quasi-stationary mass and h
 
   SI.Temperature T1 = Medium.temperature(inlet.state) "Temperature at inlet";
   SI.Temperature T2 = Medium.temperature(state) "Temperature at outlet";
-  SI.Temperature DT1 "Temperature difference 1";
-  SI.Temperature DT2 "Temperature difference 2";
+  SI.TemperatureDifference DT1 "Temperature difference 1";
+  SI.TemperatureDifference DT2 "Temperature difference 2";
 
   Real Tcross "Variable to indicate temperature crossing";
 
@@ -50,6 +50,12 @@ protected
 
   SI.Temperature T_heatPort;
   SI.HeatFlowRate Q_flow;
+
+  SI.TemperatureDifference DT1_internal = T_heatPort - T1 "Temperature difference 1 across element";
+  SI.TemperatureDifference DT2_internal = T_heatPort - T2 "Temperature difference 2 across element";
+  Real Tcross_internal = sign(DT1_internal*DT2_internal);
+  SI.Temperature T_mean = (T1+T2)/2;
+  SI.TemperatureDifference Tdriving = T_heatPort - T_mean;
 
 initial equation
   if init == Internal.InitializationMethodsCondElement.T then
@@ -95,6 +101,7 @@ equation
 
     //Q_flow = k* Modelica.Fluid.Utilities.regStep((T_heatPort - T1)*(T_heatPort - T2),T_heatPort - T1/2 - T2/2,T_heatPort - T2, 0.5);
     Q_flow = k* Modelica.Fluid.Utilities.regStep(DT1*DT2,T_heatPort - T1/2 - T2/2,T_heatPort - T2, 0.5);
+    //Q_flow = k*(T_heatPort - T1/2 - T2/2);
 
   else
     assert(noEvent((T_heatPort - T1)*(T_heatPort - T2) > 0), "Temperature Crossing! Temperature differences have different sign", AssertionLevel.warning);
