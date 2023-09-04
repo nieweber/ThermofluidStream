@@ -24,6 +24,30 @@ model DiscretizedCrossFlowHEX "Discretized heat exchanger for single- or two-pha
         rotation=180,
         origin={50,-80})));
 
+  Internal.TemperatureCrossingObserver temperatureCrossingObserver[nCells] annotation (Placement(transformation(extent={{-46,-10},{-66,10}})));
+
+  Sensors.SingleSensorSelect TsensorAout[nCells](
+    redeclare package Medium = MediumA,
+    each quantity=ThermofluidStream.Sensors.Internal.Types.Quantities.T_K,
+    each outputValue=true) annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=270,
+        origin={-26,-54})));
+  Sensors.SingleSensorSelect TsensorB[nCells + 1](
+    redeclare package Medium = MediumB,
+    each quantity=ThermofluidStream.Sensors.Internal.Types.Quantities.T_K,
+    each outputValue=true) annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={20,54})));
+
+  Sensors.SingleSensorSelect TsensorAin[nCells](
+    redeclare package Medium = MediumA,
+    each quantity=ThermofluidStream.Sensors.Internal.Types.Quantities.T_K,
+    each outputValue=true) annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=270,
+        origin={30,-54})));
 initial equation
 
   if initializeMassFlow then
@@ -42,6 +66,29 @@ equation
   for i in 1:nCells - 1 loop
     connect(thermalElementB[i].outlet, thermalElementB[i + 1].inlet);
   end for;
+
+  connect(thermalElementA.inlet, TsensorAin.inlet);
+  connect(thermalElementA.outlet, TsensorAout.inlet);
+
+  for i in 1:nCells loop
+    connect(thermalElementB[i].outlet, TsensorB[i+1].inlet);
+  end for;
+    connect(inletB, TsensorB[1].inlet);
+
+  for i in 1:nCells loop
+    connect(temperatureCrossingObserver[i].TinB, TsensorB[i].value_out);
+    connect(temperatureCrossingObserver[i].ToutB, TsensorB[i+1].value_out);
+  end for;
+
+  connect(temperatureCrossingObserver.TinA, TsensorAin.value_out);
+  connect(temperatureCrossingObserver.ToutA, TsensorAout.value_out);
+
+  connect(temperatureCrossingObserver.DT1, thermalElementA.DT1_input);
+  connect(temperatureCrossingObserver.DT2, thermalElementA.DT2_input);
+  connect(temperatureCrossingObserver.DT1, thermalElementB.DT1_input);
+  connect(temperatureCrossingObserver.DT2, thermalElementB.DT2_input);
+
+
   connect(thermalElementB[nCells].outlet, outletB) annotation (Line(points={{10,80},{100,80}}, color={28,108,200}));
   connect(thermalElementB.heatPort, thermalConductor.port_b) annotation (Line(points={{0,70.2},{0,14},{-1.77636e-15,14},{-1.77636e-15,10},{0,10}}, color={191,0,0}));
   connect(thermalElementA.heatPort, thermalConductor.port_a) annotation (Line(points={{0,-70.2},{0,-42},{0,-42},{0,-10},{0,-10}}, color={191,0,0}));
