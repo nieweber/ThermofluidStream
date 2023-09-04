@@ -2,7 +2,7 @@ within ThermofluidStream.HeatExchangers;
 model DiscretizedCounterFlowHEX "Discretized heat exchanger for single- or two-phase working fluids without pressure drop"
   extends Internal.PartialDiscretizedHEX;
 
-  Internal.TemperatureCrossingObserver temperatureCrossingObserver[nCells] annotation (Placement(transformation(extent={{-42,-12},{-62,8}})));
+  Internal.TemperatureCrossingObserver temperatureCrossingObserver[nCells] annotation (Placement(transformation(extent={{-42,-10},{-62,10}})));
 
   Sensors.SingleSensorSelect TsensorA[nCells + 1](
     redeclare package Medium = MediumA,
