@@ -27,6 +27,8 @@ the inlet the source is connected to.
     annotation(Dialog(enable = not xiFromInput));
   parameter Utilities.Units.Inertance L=dropOfCommons.L "Inertance"
     annotation (Dialog(tab="Advanced"));
+  parameter SI.MassFlowRate m_flow_assert(max=0) = -dropOfCommons.m_flow_reg "Assertion threshold for negative mass flow"
+    annotation(Dialog(tab="Advanced"));
 
   Modelica.Blocks.Interfaces.RealInput p0_var(unit="Pa") if pressureFromInput "Pressure input connector [Pa]"
     annotation (Placement(transformation(extent={{-40,40},{0,80}}), iconTransformation(extent={{-40,40},{0,80}})));
@@ -48,6 +50,7 @@ protected
   Modelica.Blocks.Interfaces.RealInput Xi0[Medium.nXi](each unit = "kg/kg") "Internal mass fraction connector";
 
 equation
+   assert(-outlet.m_flow > m_flow_assert, "Positive mass flow at source outlet", dropOfCommons.assertionLevel);
 
    connect(T0_var, T0);
    if not temperatureFromInput or setEnthalpy then
