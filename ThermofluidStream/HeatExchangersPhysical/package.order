@@ -1,0 +1,12 @@
+HX_1PhaseCross_2PhasePipe
+HX_CondensingAirCross_2PhasePipe
+HX_1PhaseCross_CondensingAirPipe
+HXcrossIcon
+Test_HXcross_Condenser
+Test_HXcross_Evaporator
+Test_HXcross_MoistAirCross_CondensingAirPipe
+Test_HXcross_MoistAirCross_LiquidWaterPipe
+HXcellPairs
+ConductionElements
+Internal
+HXutilities

@@ -5,6 +5,7 @@ Boundaries
 Topology
 Processes
 HeatExchangers
+HeatExchangersPhysical
 FlowControl
 Sensors
 Undirected
