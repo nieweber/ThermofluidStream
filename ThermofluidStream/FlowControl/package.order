@@ -1,10 +1,10 @@
 BasicControlValve
 SpecificValveType
-TanValve
 CheckValve
 MCV
 PCV
 Switch
 FourWaySwitch
+TanValve
 Tests
 Internal
