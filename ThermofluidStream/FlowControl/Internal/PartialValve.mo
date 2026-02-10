@@ -11,11 +11,12 @@ partial model PartialValve "Partial implementation of a physical valve"
     annotation (Placement(transformation(extent={{-20,-20},{20,20}},rotation=270,origin={0,80})));
 
   Real u(unit="1") "Actuation input for flow calculation";
+
   parameter Modelica.Units.SI.Pressure dp_ref=1e5
     "Reference pressure difference"
-    annotation (Dialog(tab="Advanced", group="Reference values"));
+    annotation (Dialog(group="Reference values"));
   parameter Modelica.Units.SI.Density rho_ref=1000 "Reference density"
-    annotation (Dialog(tab="Advanced", group="Reference values"));
+    annotation (Dialog(group="Reference values"));
 
 protected
   final constant Real secondsPerHour(final unit="s/h") = 3600 "Unit conversion parameter";
@@ -25,6 +26,7 @@ protected
 
   parameter SI.MassFlowRate m_flow_ref(fixed = false) "Reference mass flow rate derived from flow coefficient inputs";
   Real k_u(unit="1") "Kv/Kvs, respecting flow characteristics";
+
 
 equation
   //Inversion of input signal, actuation has to be between 0 and 1
