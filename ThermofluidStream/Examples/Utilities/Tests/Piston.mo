@@ -114,8 +114,20 @@ model Piston "Test for Piston model"
     redeclare function pLoss = Processes.Internal.FlowResistance.linearQuadraticPressureLoss (
       k=10))
     annotation (Placement(transformation(extent={{34,-30},{54,-10}})));
-  FlowControl.TanValve tanValve(redeclare package Medium = Medium, invertInput=false) annotation (Placement(transformation(extent={{64,20},{84,0}})));
-  FlowControl.TanValve tanValve1(redeclare package Medium = Medium, invertInput=true) annotation (Placement(transformation(extent={{64,-30},{84,-10}})));
+  FlowControl.BasicControlValve
+                       basicControlValve(
+                                redeclare package Medium = Medium, invertInput=false,
+    k_min=0.000246781,
+    rho_ref(displayUnit="kg/m3") = 3,
+    flowCoefficient=ThermofluidStream.FlowControl.Internal.Types.FlowCoefficientTypesBasic.m_flow_set,
+    m_flow_ref_set=6.36567)                                                           annotation (Placement(transformation(extent={{64,20},{84,0}})));
+  FlowControl.BasicControlValve
+                       basicControlValve1(
+                                 redeclare package Medium = Medium, invertInput=true,
+    k_min=0.000246781,
+    rho_ref(displayUnit="kg/m3") = 3,
+    flowCoefficient=ThermofluidStream.FlowControl.Internal.Types.FlowCoefficientTypesBasic.m_flow_set,
+    m_flow_ref_set=6.36567)                                                           annotation (Placement(transformation(extent={{64,-30},{84,-10}})));
   Modelica.Blocks.Sources.Ramp ramp(
     height=-6e5,
     duration=5,
@@ -168,26 +180,24 @@ equation
       points={{94,10},{124,10},{124,26}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve.inlet, flowResistance1.outlet) annotation (Line(
+  connect(basicControlValve.inlet, flowResistance1.outlet) annotation (Line(
       points={{64,10},{54,10}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve1.inlet, flowResistance3.outlet) annotation (Line(
+  connect(basicControlValve1.inlet, flowResistance3.outlet) annotation (Line(
       points={{64,-20},{54,-20}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve1.u, tanValve.u) annotation (Line(points={{74,-12},{74,2}}, color={0,0,127}));
-  connect(junctionT2_1.inletB, tanValve.outlet) annotation (Line(
+  connect(junctionT2_1.inletB, basicControlValve.outlet) annotation (Line(
       points={{114,10},{84,10}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve1.outlet, junctionT2_1.inletA) annotation (Line(
+  connect(basicControlValve1.outlet, junctionT2_1.inletA) annotation (Line(
       points={{84,-20},{104,-20},{104,0}},
       color={28,108,200},
       thickness=0.5));
   connect(ramp.y, source.p0_var) annotation (Line(points={{-113,10},{-106,10},{-106,16},{-98,16}},
                                                                                 color={0,0,127}));
-  connect(firstOrder.y, tanValve.u) annotation (Line(points={{-9,56},{16,56},{16,28},{58,28},{58,-4},{74,-4},{74,2}}, color={0,0,127}));
   connect(switch.outletA, flowResistance.inlet) annotation (Line(
       points={{-56,10},{-46,10}},
       color={28,108,200},
@@ -196,7 +206,12 @@ equation
       points={{-66,0},{-66,-20},{-46,-20}},
       color={28,108,200},
       thickness=0.5));
-  connect(switch.u, tanValve.u) annotation (Line(points={{-66,22},{-66,28},{58,28},{58,-4},{74,-4},{74,2}}, color={0,0,127}));
+  connect(firstOrder.y, switch.u) annotation (Line(points={{-9,56},{8,56},{8,34},
+          {-66,34},{-66,22}}, color={0,0,127}));
+  connect(firstOrder.y, basicControlValve.u_in) annotation (Line(points={{-9,56},
+          {58,56},{58,-4},{74,-4},{74,2}}, color={0,0,127}));
+  connect(firstOrder.y, basicControlValve1.u_in) annotation (Line(points={{-9,
+          56},{58,56},{58,-4},{74,-4},{74,-12}}, color={0,0,127}));
     annotation (
       experiment(StopTime=15, Tolerance=1e-6, Interval=0.015),
         Documentation(info="<html>
