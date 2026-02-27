@@ -104,8 +104,20 @@ model SimpleEngine "Simple steam engine"
     redeclare function pLoss = Processes.Internal.FlowResistance.laminarTurbulentPressureLoss (
       material=ThermofluidStream.Processes.Internal.Material.steel))
     annotation (Placement(transformation(extent={{88,24},{108,44}})));
-  FlowControl.TanValve tanValve(redeclare package Medium = Water, invertInput=false) annotation (Placement(transformation(extent={{100,64},{120,44}})));
-  FlowControl.TanValve tanValve1(redeclare package Medium = Water, invertInput=true) annotation (Placement(transformation(extent={{120,24},{140,44}})));
+  FlowControl.BasicControlValve
+                       basicControlValve(
+                                redeclare package Medium = Water, invertInput=false,
+    k_min=0.000246781,
+    rho_ref(displayUnit="kg/m3") = 0.3,
+    flowCoefficient=ThermofluidStream.FlowControl.Internal.Types.FlowCoefficientTypesBasic.m_flow_set,
+    m_flow_ref_set=6.36567)                                                          annotation (Placement(transformation(extent={{100,64},{120,44}})));
+  FlowControl.BasicControlValve
+                       basicControlValve1(
+                                 redeclare package Medium = Water, invertInput=true,
+    k_min=0.000246781,
+    rho_ref(displayUnit="kg/m3") = 0.3,
+    flowCoefficient=ThermofluidStream.FlowControl.Internal.Types.FlowCoefficientTypesBasic.m_flow_set,
+    m_flow_ref_set=6.36567)                                                          annotation (Placement(transformation(extent={{120,24},{140,44}})));
   Modelica.Blocks.Math.BooleanToReal booleanToReal(realTrue=0.0, realFalse=1.0)
     annotation (Placement(transformation(
         extent={{8,-8},{-8,8}},
@@ -178,19 +190,19 @@ equation
       points={{88,34},{80,34}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve.inlet,flowResistance5. outlet) annotation (Line(
+  connect(basicControlValve.inlet, flowResistance5.outlet) annotation (Line(
       points={{100,54},{90,54}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve1.inlet,flowResistance6. outlet) annotation (Line(
+  connect(basicControlValve1.inlet, flowResistance6.outlet) annotation (Line(
       points={{120,34},{108,34}},
       color={28,108,200},
       thickness=0.5));
-  connect(junctionT2_1.inletB,tanValve. outlet) annotation (Line(
+  connect(junctionT2_1.inletB, basicControlValve.outlet) annotation (Line(
       points={{140,54},{120,54}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve1.outlet,junctionT2_1. inletA) annotation (Line(
+  connect(basicControlValve1.outlet, junctionT2_1.inletA) annotation (Line(
       points={{140,34},{150,34},{150,44}},
       color={28,108,200},
       thickness=0.5));
@@ -210,8 +222,6 @@ equation
       thickness=0.5));
   connect(booleanToReal.y, firstOrder.u) annotation (Line(points={{-61.2,-16},{-49.6,-16}},
                                                                                       color={0,0,127}));
-  connect(firstOrder.y, tanValve.u) annotation (Line(points={{-31.2,-16},{-24,-16},{-24,14},{110,14},{110,46}},
-                                                                                                         color={0,0,127}));
   connect(boiler.outlet, conductionElement.inlet) annotation (Line(
       points={{-80,54},{-60,54}},
       color={28,108,200},
@@ -233,9 +243,13 @@ equation
       points={{-20,54},{-40,54}},
       color={28,108,200},
       thickness=0.5));
-  connect(switch.u, tanValve.u) annotation (Line(points={{-10,66},{-10,74},{-24,74},{-24,14},{110,14},{110,46}}, color={0,0,127}));
-  connect(tanValve1.u, tanValve.u) annotation (Line(points={{130,42},{130,48},{122,48},{122,40},{110,40},{110,46}}, color={0,0,127}));
   connect(crankDrive.flange_b, piston.flange) annotation (Line(points={{0,-70},{20,-70}},  color={0,127,0}));
+  connect(basicControlValve.u_in, firstOrder.y) annotation (Line(points={{110,
+          46},{110,-16},{-31.2,-16}}, color={0,0,127}));
+  connect(basicControlValve1.u_in, firstOrder.y) annotation (Line(points={{130,
+          42},{110,42},{110,-16},{-31.2,-16}}, color={0,0,127}));
+  connect(switch.u, firstOrder.y) annotation (Line(points={{-10,66},{-10,70},{
+          -18,70},{-18,-16},{-31.2,-16}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
     Diagram(
