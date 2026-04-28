@@ -27,18 +27,27 @@ Medium model for water.
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-60,-60})));
-  FlowControl.TanValve tanValve(
+  FlowControl.BasicControlValve
+                       basicControlValve(
     redeclare package Medium = Water,
     invertInput=false,
-    relativeLeakiness=1e-8)
+    k_min=1e-10,
+    flowCoefficient=ThermofluidStream.FlowControl.Internal.Types.FlowCoefficientTypesBasic.m_flow_set,
+    m_flow_ref_set=6.5e6)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-60,-30})));
 
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow heating_element
     annotation (Placement(transformation(extent={{-110,0},{-90,20}})));
-  FlowControl.TanValve tanValve1(redeclare package Medium = Water,
-      relativeLeakiness=1e-6)
+  FlowControl.BasicControlValve
+                       basicControlValve2(
+                                 redeclare package Medium = Water,
+    k_min=2.47e-10,
+    redeclare function valveCharacteristics =
+        ThermofluidStream.FlowControl.Internal.ControlValve.equalPercentageCharacteristics,
+    flowCoefficient=ThermofluidStream.FlowControl.Internal.Types.FlowCoefficientTypesBasic.m_flow_set,
+    m_flow_ref_set=63662)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=270,
         origin={-30,150})));
@@ -122,10 +131,15 @@ Medium model for water.
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={110,-50})));
-  FlowControl.TanValve tanValve2(
+  FlowControl.BasicControlValve
+                       basicControlValve1(
     redeclare package Medium = Water,
     initM_flow=ThermofluidStream.Utilities.Types.InitializationMethods.state,
-    relativeLeakiness=1e-7)
+    k_min=1e-13,
+    redeclare function valveCharacteristics =
+        ThermofluidStream.FlowControl.Internal.ControlValve.equalPercentageCharacteristics,
+    flowCoefficient=ThermofluidStream.FlowControl.Internal.Types.FlowCoefficientTypesBasic.m_flow_set,
+    m_flow_ref_set=6.5e5)
     annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=90,
         origin={110,-80})));
@@ -289,9 +303,14 @@ Medium model for water.
 
   Modelica.Blocks.Sources.RealExpression realExpression3(y=8.5)
     annotation (Placement(transformation(extent={{-200,-90},{-180,-110}})));
-  FlowControl.TanValve tanValve6(
+  FlowControl.BasicControlValve
+                       basicControlValve3(
     redeclare package Medium = Water,
-      relativeLeakiness=1e-6)
+    k_min=2.47e-10,
+    redeclare function valveCharacteristics =
+        ThermofluidStream.FlowControl.Internal.ControlValve.equalPercentageCharacteristics,
+    flowCoefficient=ThermofluidStream.FlowControl.Internal.Types.FlowCoefficientTypesBasic.m_flow_set,
+    m_flow_ref_set=63662)
     annotation (Placement(transformation(extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-88,150})));
@@ -398,24 +417,22 @@ equation
       points={{-52,30},{-52,128}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve1.inlet, flowResistance1.outlet) annotation (Line(
+  connect(basicControlValve2.inlet, flowResistance1.outlet) annotation (Line(
       points={{-30,160},{-30,170},{-52,170},{-52,148}},
       color={28,108,200},
       thickness=0.5));
   connect(boiler.heatport_HX, hex.heatPort)
     annotation (Line(points={{-48,10},{-28,10}}, color={191,0,0}));
-  connect(singleFlowSensor.outlet, tanValve2.inlet) annotation (Line(
+  connect(singleFlowSensor.outlet, basicControlValve1.inlet) annotation (Line(
       points={{110,-60},{110,-70}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve2.outlet, coffeeStrainer.inlet) annotation (Line(
+  connect(basicControlValve1.outlet, coffeeStrainer.inlet) annotation (Line(
       points={{110,-90},{110,-108.2}},
       color={28,108,200},
       thickness=0.5));
   connect(espressoValve.y, firstOrder2.u)
     annotation (Line(points={{47,-80},{54,-80}}, color={0,0,127}));
-  connect(tanValve2.u, firstOrder2.y)
-    annotation (Line(points={{102,-80},{77,-80}},color={0,0,127}));
   connect(multiSensor_Tp.inlet, hex.outlet) annotation (Line(
       points={{0,30},{-20,30},{-20,20}},
       color={28,108,200},
@@ -450,23 +467,20 @@ equation
       points={{126,-96},{110,-96},{110,-108.2}},
       color={28,108,200},
       thickness=0.5));
-  connect(flowResistance.outlet, tanValve.inlet)
-    annotation (Line(
+  connect(flowResistance.outlet, basicControlValve.inlet) annotation (Line(
       points={{-60,-50},{-60,-40}},
       color={28,108,200},
       thickness=0.5));
-  connect(boiler.inlet, tanValve.outlet) annotation (Line(
+  connect(boiler.inlet, basicControlValve.outlet) annotation (Line(
       points={{-60,-10},{-60,-20}},
       color={28,108,200},
       thickness=0.5));
   connect(gain.y, feedback.u1) annotation (Line(points={{46.6,34},{78,34},{78,0},{68,0}}, color={0,0,127}));
-  connect(tanValve1.u, firstOrder1.y) annotation (Line(points={{-22,150},{-11,150}},
-                                     color={0,0,127}));
   connect(thermalResistor.port_a, brewing_head.port)
     annotation (Line(points={{160,20},{140,20}}, color={191,0,0}));
   connect(environment.port, thermalResistor.port_b)
     annotation (Line(points={{190,20},{180,20}}, color={191,0,0}));
-  connect(tanValve1.outlet, singleFlowSensor2.inlet) annotation (Line(
+  connect(basicControlValve2.outlet, singleFlowSensor2.inlet) annotation (Line(
       points={{-30,140},{-30,130}},
       color={28,108,200},
       thickness=0.5));
@@ -503,9 +517,6 @@ equation
   connect(PID2.y, firstOrder3.u)
     annotation (Line(points={{-129,-30},{-112,-30}},
                                                  color={0,0,127}));
-  connect(tanValve.u, firstOrder3.y)
-    annotation (Line(points={{-68,-30},{-89,-30}},
-                                                 color={0,0,127}));
   connect(realExpression3.y, PID3.u_s)
     annotation (Line(points={{-179,-100},{-172,-100}},
                                                      color={0,0,127}));
@@ -515,13 +526,11 @@ equation
       points={{-130,-120},{-120,-120}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve6.inlet,flowResistance5. outlet) annotation (Line(
+  connect(basicControlValve3.inlet, flowResistance5.outlet) annotation (Line(
       points={{-88,160},{-88,170},{-68,170},{-68,148}},
       color={28,108,200},
       thickness=0.5));
-  connect(tanValve6.u,firstOrder7. y) annotation (Line(points={{-96,150},{-109,150}},
-                                     color={0,0,127}));
-  connect(tanValve6.outlet,singleFlowSensor3. inlet) annotation (Line(
+  connect(basicControlValve3.outlet, singleFlowSensor3.inlet) annotation (Line(
       points={{-88,140},{-88,130}},
       color={28,108,200},
       thickness=0.5));
@@ -603,6 +612,14 @@ equation
       points={{110,30},{110,44},{-20,44},{-20,20}},
       color={28,108,200},
       thickness=0.5));
+  connect(firstOrder2.y, basicControlValve1.u_in)
+    annotation (Line(points={{77,-80},{102,-80}}, color={0,0,127}));
+  connect(firstOrder3.y, basicControlValve.u_in)
+    annotation (Line(points={{-89,-30},{-68,-30}}, color={0,0,127}));
+  connect(firstOrder7.y, basicControlValve3.u_in)
+    annotation (Line(points={{-109,150},{-96,150}}, color={0,0,127}));
+  connect(firstOrder1.y, basicControlValve2.u_in)
+    annotation (Line(points={{-11,150},{-22,150}}, color={0,0,127}));
   annotation(experiment(
       StopTime=1500,
       Tolerance=1e-6,
