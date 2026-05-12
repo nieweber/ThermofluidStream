@@ -77,5 +77,17 @@ equation
 <p>If p_out should be lower the p_min, the remaining pressure drop is added on the difference in inertial pressure r, basically accelerating or decelerating the massflow. </p>
 <p>The component offers different initialization methods for the massflow, as well as several parameters used in the equations above. </p>
 <p>The clipping of the massflow can be turned off (this should be done by the modeler as a final modificator while extending to hide this option from the enduser).</p>
-</html>"));
+</html>"), Icon(graphics={
+        Polygon(
+          points={{120,-20},{80,-40},{120,-60},{108,-40},{120,-20}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={238,46,47},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{-80,-20},{-120,-40},{-80,-60},{-92,-40},{-80,-20}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={238,46,47},
+          fillPattern=FillPattern.Solid)}));
 end SISOFlow;
