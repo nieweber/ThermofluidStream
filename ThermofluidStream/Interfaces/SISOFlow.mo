@@ -85,15 +85,27 @@ equation
 <p>The clipping of the massflow can be turned off (this should be done by the modeler as a final modificator while extending to hide this option from the enduser).</p>
 </html>"), Icon(graphics={
         Polygon(
-          points={{120,-20},{80,-40},{120,-60},{108,-40},{120,-20}},
+          points={{-88,-28},{-120,-40},{-88,-52},{-100,-40},{-88,-28}},
           lineColor={0,0,0},
           pattern=LinePattern.None,
-          fillColor={238,46,47},
+          fillColor={244,125,35},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{-100,-38},{-70,-42}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={244,125,35},
+          fillPattern=FillPattern.Solid),
+        Rectangle(
+          extent={{90,-38},{120,-42}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillColor={244,125,35},
           fillPattern=FillPattern.Solid),
         Polygon(
-          points={{-80,-20},{-120,-40},{-80,-60},{-92,-40},{-80,-20}},
+          points={{102,-28},{70,-40},{102,-52},{90,-40},{102,-28}},
           lineColor={0,0,0},
           pattern=LinePattern.None,
-          fillColor={238,46,47},
+          fillColor={244,125,35},
           fillPattern=FillPattern.Solid)}));
 end SISOFlow;
