@@ -71,6 +71,12 @@ equation
 
   outlet.state = Medium.setState_phX(p_out, h_out, Xi_out);
 
+  //Massflow warnings
+  assert(abs(m_flow) >= dropOfCommons.m_flow_reg, "Mass flow rate is within the regularization region (|m_flow| < " + String(dropOfCommons.m_flow_reg) + " kg/s).
+  Simulation results may be inaccurate or physically not valid.", AssertionLevel.warning);
+  assert(m_flow >= -dropOfCommons.m_flow_reg, "Significant negative mass flow rate detected (m_flow < -" + String(dropOfCommons.m_flow_reg) + " kg/s).
+  Simulation results may be inaccurate or physically not valid.", AssertionLevel.warning);
+
   annotation (Documentation(info="<html>
 <p>Interface class for all components with an Inlet and an Outlet and a massflow without a mass storage between.</p>
 <p>This class already implements the equations that are common for such components, namly the conservation of mass, the intertance equation, as well as the clipping of p_out to p_min. </p>
