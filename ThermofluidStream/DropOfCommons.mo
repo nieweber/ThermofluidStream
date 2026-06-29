@@ -25,6 +25,18 @@ model DropOfCommons "Model for global parameters"
   parameter Boolean displayColor = false "= true, if pressure drop is displayed in color" annotation(Dialog(group="Layout"),Evaluate=true, HideResult=true, choices(checkBox=true));
   final parameter Integer instanceNameColor[3] = {28,108,200} "Color of the component name"; // Default Color: {28,108,200}
 
+  parameter SI.Time warningDelay = 0.5 "Delay time for mass-flow warning";
+  SI.Time tStartSim "Simulation start time";
+  SI.Time t_warning "Time after start when warning is striggered";
+
+equation
+  when initial() then
+    tStartSim = time;
+  end when;
+
+  t_warning = tStartSim + warningDelay;
+
+
   annotation (defaultComponentName="dropOfCommons",
     defaultComponentPrefixes="inner",
     missingInnerMessage="
