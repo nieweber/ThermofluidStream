@@ -72,8 +72,10 @@ equation
   outlet.state = Medium.setState_phX(p_out, h_out, Xi_out);
 
   //Massflow warnings
+  if time > dropOfCommons.t_warning then
   assert(abs(m_flow) >= dropOfCommons.m_flow_reg, "Mass flow rate is within the regularization region (|m_flow| < " + String(dropOfCommons.m_flow_reg) + " kg/s).
   Simulation results may be inaccurate or physically not valid.", AssertionLevel.warning);
+  end if;
   assert(m_flow >= -dropOfCommons.m_flow_reg, "Significant negative mass flow rate detected (m_flow < -" + String(dropOfCommons.m_flow_reg) + " kg/s).
   Simulation results may be inaccurate or physically not valid.", AssertionLevel.warning);
 
