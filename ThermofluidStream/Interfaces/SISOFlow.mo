@@ -109,5 +109,17 @@ equation
           lineColor={0,0,0},
           pattern=LinePattern.None,
           fillColor={244,125,35},
-          fillPattern=FillPattern.Solid)}));
+          fillPattern=FillPattern.Solid),
+        Ellipse(
+          extent={{-114,-26},{-86,-54}},
+          lineColor={28,108,200},
+          fillColor={244,125,35},
+          fillPattern=DynamicSelect(FillPattern.None, if abs(m_flow) <= dropOfCommons.m_flow_reg then FillPattern.Solid else FillPattern.None),
+          pattern=LinePattern.None),
+        Ellipse(
+          extent={{86,-26},{114,-54}},
+          lineColor={28,108,200},
+          fillColor={244,125,35},
+          fillPattern=DynamicSelect(FillPattern.None, if abs(m_flow) <= dropOfCommons.m_flow_reg then FillPattern.Solid else FillPattern.None),
+          pattern=LinePattern.None)}));
 end SISOFlow;
